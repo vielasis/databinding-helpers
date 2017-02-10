@@ -1,5 +1,6 @@
 package com.viel.databindinghelpers.bindingconversions;
 
+import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
 import android.view.View;
 
@@ -15,6 +16,11 @@ public class Visibility {
     @BindingConversion
     public static int booleanToIntVisibility(boolean visible) {
         return visible ? View.VISIBLE : View.GONE;
+    }
+
+    @BindingAdapter("invisible")
+    public static void setViewInvisible(View v, boolean visible) {
+        v.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
 }
