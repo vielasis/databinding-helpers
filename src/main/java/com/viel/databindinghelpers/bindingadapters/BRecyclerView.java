@@ -11,8 +11,9 @@ import com.viel.databindinghelpers.factories.LayoutManagers;
 
 public class BRecyclerView {
 
-    @BindingAdapter("layoutManager")
-    public static void setLayoutManager(RecyclerView rv, LayoutManagers.Factory factory) {
+    // Renamed to avoid collision with the real app:layoutManager property of RecyclerView
+    @BindingAdapter("layoutManager2")
+    public static void setLayoutManagerBinded(RecyclerView rv, LayoutManagers.Factory factory) {
         rv.setLayoutManager(factory.create(rv.getContext()));
     }
 
