@@ -2,28 +2,43 @@ package com.viel.databindinghelpers.dataadapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by viel on 10/02/2017.
  */
 
-public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder> implements IBindingAdapter {
+public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder> implements IBindingAdapter, Filterable {
 
     private List<T> items;
+    private List<T> filteredItems;
+    protected Filter filter;
 
     public void setItems(List<T> items) {
         if (this.items == items) {
             return;
         }
         this.items = items;
+        filteredItems = new LinkedList<>();
+        filteredItems.addAll(items);
         notifyDataSetChanged();
+    }
+
+    public List<T> getItems() {
+        return items;
+    }
+
+    protected List<T> getFilteredItems() {
+        return filteredItems;
     }
 
     @Override
@@ -33,24 +48,26 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(BindingViewHolder holder, int position) {
-        holder.binding.setVariable(getBindingVariable(), items.get(position));
+        holder.bind(getBindingVariable(), filteredItems.get(position));
         onBindViewBinding(holder.binding, position);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getLayoutIdForPosition();
+        return getLayoutIdForPosition(position);
     }
 
     public abstract int getBindingVariable();
 
-    public abstract @IdRes int getLayoutIdForPosition();
+    public abstract
+    @LayoutRes
+    int getLayoutIdForPosition(int position);
 
     public abstract void onBindViewBinding(ViewDataBinding binding, int position);
 
     @Override
     public int getItemCount() {
-        return items == null ? 0 : items.size();
+        return filteredItems == null ? 0 : filteredItems.size();
     }
 
     static class BindingViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +79,9 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             binding = DataBindingUtil.bind(itemView);
             binding.executePendingBindings();
         }
+
+        public void bind(int bindingVariable, Object variable) {
+            binding.setVariable(bindingVariable, variable);
+        }
     }
-
-
 }
