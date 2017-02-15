@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,11 +15,10 @@ import java.util.List;
  * Created by viel on 10/02/2017.
  */
 
-public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder> implements IBindingAdapter, Filterable {
+public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder> implements IBindingAdapter {
 
     private List<T> items;
     private List<T> filteredItems;
-    protected Filter filter;
 
     public void setItems(List<T> items) {
         if (this.items == items) {
