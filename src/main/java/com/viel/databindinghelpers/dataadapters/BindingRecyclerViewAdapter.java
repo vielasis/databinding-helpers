@@ -74,11 +74,11 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         public BindingViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-            binding.executePendingBindings();
         }
 
         public void bind(int bindingVariable, Object variable) {
             binding.setVariable(bindingVariable, variable);
+            binding.executePendingBindings();
         }
     }
 }
