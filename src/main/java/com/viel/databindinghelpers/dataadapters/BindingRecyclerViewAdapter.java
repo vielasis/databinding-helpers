@@ -2,7 +2,6 @@ package com.viel.databindinghelpers.dataadapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,8 @@ import java.util.List;
 
 public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder> implements IBindingAdapter {
 
-    private List<T> items;
-    private List<T> filteredItems;
+    protected List<T> items;
+    protected List<T> filteredItems;
 
     public void setItems(List<T> items) {
         if (this.items == items) {
@@ -30,12 +29,12 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
-    public List<T> getItems() {
-        return items;
+    protected T getItem(int position) {
+        return items.get(position);
     }
 
-    protected List<T> getFilteredItems() {
-        return filteredItems;
+    protected T getFilteredItem(int position) {
+        return filteredItems.get(position);
     }
 
     @Override
@@ -54,20 +53,12 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         return getLayoutId(position);
     }
 
-    public abstract int getBindingVariable(int position);
-
-    public abstract
-    @LayoutRes
-    int getLayoutId(int position);
-
-    public abstract void onBindViewBinding(ViewDataBinding binding, int position);
-
     @Override
     public int getItemCount() {
         return filteredItems == null ? 0 : filteredItems.size();
     }
 
-    static class BindingViewHolder extends RecyclerView.ViewHolder {
+    static class BindingViewHolder extends RecyclerView.ViewHolder implements IBindingViewHolder {
 
         ViewDataBinding binding;
 
@@ -76,9 +67,12 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             binding = DataBindingUtil.bind(itemView);
         }
 
-        public void bind(int bindingVariable, Object variable) {
-            binding.setVariable(bindingVariable, variable);
-            binding.executePendingBindings();
+        @Override
+        public void bind(int varId, Object variable) {
+            if (varId > 0) {
+                binding.setVariable(varId, variable);
+                binding.executePendingBindings();
+            }
         }
     }
 }
