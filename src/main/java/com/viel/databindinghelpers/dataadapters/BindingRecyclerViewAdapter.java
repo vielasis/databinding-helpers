@@ -58,9 +58,9 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         return filteredItems == null ? 0 : filteredItems.size();
     }
 
-    static class BindingViewHolder extends RecyclerView.ViewHolder implements IBindingViewHolder {
+    public static class BindingViewHolder extends RecyclerView.ViewHolder implements IBindingViewHolder {
 
-        ViewDataBinding binding;
+        public ViewDataBinding binding;
 
         public BindingViewHolder(View itemView) {
             super(itemView);
