@@ -24,7 +24,7 @@ task clean(type: Delete) {
 
 ext {
 
-    libraryVersion = '0.1.0'
+    libraryVersion = '0.1.1'
     supportLibsVersion = '25.1.0'
 
     android = [
