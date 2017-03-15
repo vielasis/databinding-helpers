@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.viel.databindinghelpers.dataadapters;
+package com.viel.databindinghelpers.recyclerview;
 
-public interface IBindingViewHolder {
+public interface ItemView {
 
-    void bind(int varId, Object variable);
+    int getLayoutId(int position);
+
+    int getBindingVarId(int position);
 }

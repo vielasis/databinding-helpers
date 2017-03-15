@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-package com.viel.databindinghelpers.dataadapters;
+package com.viel.databindinghelpers.recyclerview;
 
+import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.support.annotation.LayoutRes;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-public interface IBindingAdapter {
+public class BindingViewHolder extends RecyclerView.ViewHolder implements IBindingViewHolder {
 
-    int getBindingVariable(int position);
+    public ViewDataBinding binding;
 
-    @LayoutRes
-    int getLayoutId(int position);
+    public BindingViewHolder(View itemView) {
+        super(itemView);
+        binding = DataBindingUtil.bind(itemView);
+    }
 
-    void onBindViewBinding(ViewDataBinding binding, int position);
-
+    @Override
+    public void bind(int varId, Object variable) {
+        if (varId > 0) {
+            binding.setVariable(varId, variable);
+            binding.executePendingBindings();
+        }
+    }
 }
