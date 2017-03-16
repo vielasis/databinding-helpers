@@ -16,14 +16,54 @@
 
 package com.viel.databindinghelpers.recyclerview;
 
-public abstract class SimpleBindingAdapter<T> extends BindingRecyclerViewAdapter<T> {
+import android.support.annotation.AnyRes;
+import android.support.annotation.LayoutRes;
+import android.view.View;
 
-    public SimpleBindingAdapter(SimpleItemView itemView) {
-        super(itemView);
+import java.util.List;
+
+public class SimpleBindingAdapter<T> {
+
+    private BindingRecyclerViewAdapter<T> adapter;
+
+    public BindingRecyclerViewAdapter<T> getAdapter() {
+        return adapter;
     }
 
-    @Override
-    public void onBindViewBinding(BindingViewHolder holder, int position) {
+    public void setItems(List<T> items) {
+        adapter.setItems(items);
+    }
 
+    public SimpleBindingAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId) {
+        this(layoutId, bindingVarId, null, null);
+    }
+
+    public SimpleBindingAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId, List<T> items) {
+        this(layoutId, bindingVarId, items, null);
+    }
+
+    public SimpleBindingAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId, List<T> items, final ItemClickListener<T> itemClickListener) {
+        adapter = new BindingRecyclerViewAdapter<T>(new SimpleItemView(layoutId, bindingVarId)) {
+            @Override
+            public void onBindViewBinding(BindingViewHolder holder, final int position) {
+                if (itemClickListener != null) {
+                    holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            itemClickListener.onItemClick(getItem(position), position);
+                        }
+                    });
+                } else {
+                    holder.binding.getRoot().setOnClickListener(null);
+                }
+            }
+        };
+        if (items != null) {
+            adapter.setItems(items);
+        }
+    }
+
+    public interface ItemClickListener<T> {
+        void onItemClick(T item, int position);
     }
 }

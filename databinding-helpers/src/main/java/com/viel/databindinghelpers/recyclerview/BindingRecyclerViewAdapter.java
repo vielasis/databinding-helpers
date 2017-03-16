@@ -43,6 +43,14 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
+    protected T getItem(int position) {
+        return items.get(position);
+    }
+
+    protected T getFilteredItem(int position) {
+        return filteredItems.get(position);
+    }
+
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new BindingViewHolder(LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false));

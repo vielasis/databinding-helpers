@@ -20,6 +20,7 @@ import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
 import com.viel.databindinghelpers.factories.LayoutManagers;
+import com.viel.databindinghelpers.recyclerview.SimpleBindingAdapter;
 
 public class BRecyclerView {
 
@@ -32,6 +33,11 @@ public class BRecyclerView {
     @BindingAdapter("adapter")
     public static void setAdapter(RecyclerView rv, RecyclerView.Adapter adapter) {
         rv.setAdapter(adapter);
+    }
+
+    @BindingAdapter("adapter")
+    public static void setAdapter(RecyclerView rv, SimpleBindingAdapter adapter) {
+        rv.setAdapter(adapter.getAdapter());
     }
 
 }
