@@ -1,1 +1,1 @@
-include ':databinding-helpers', ':app'
+include ':databinding-helpers'
