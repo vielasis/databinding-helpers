@@ -21,7 +21,7 @@ allprojects {
 ext {
 
     libraryVersion = '0.2.0'
-    supportLibsVersion = '25.1.0'
+    supportLibsVersion = '25.3.0'
 
     android = [
             compileSdkVersion: 25,

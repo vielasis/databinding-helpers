@@ -34,7 +34,7 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
     }
 
     public void setItems(List<T> items) {
-        if (this.items == items) {
+        if (items == null || this.items == items) {
             return;
         }
         this.items = items;
