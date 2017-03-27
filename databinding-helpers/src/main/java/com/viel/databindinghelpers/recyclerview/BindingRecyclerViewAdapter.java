@@ -19,6 +19,7 @@ package com.viel.databindinghelpers.recyclerview;
 import android.support.annotation.AnyRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -78,9 +79,13 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             holder.bind(((AbsSimpleItemView) itemView).getBindingVarId(holder.getAdapterPosition()), items.get(holder.getAdapterPosition()));
         } else {
             int[] varIds = itemView.getBindingVarIds(position);
-            List args = ((List) items.get(holder.getAdapterPosition()));
-            for (int i = 0; i < varIds.length; i++) {
-                holder.bind(varIds[i], i > args.size() ? null : args.get(i));
+            try {
+                List args = ((List) items.get(holder.getAdapterPosition()));
+                for (int i = 0; i < varIds.length; i++) {
+                    holder.bind(varIds[i], args == null || i > args.size() ? null : args.get(i));
+                }
+            } catch (Exception e) {
+                Log.e("BindingRVAdapter", e.getMessage());
             }
         }
         onBindViewBinding(holder, position);
