@@ -20,7 +20,7 @@ allprojects {
 
 ext {
 
-    libraryVersion = '0.2.0'
+    libraryVersion = '0.3.0'
     supportLibsVersion = '25.3.0'
 
     android = [
@@ -28,7 +28,7 @@ ext {
             buildToolsVersion: '25.0.2',
             minSdkVersion    : 15,
             targetSdkVersion : 25,
-            versionCode      : 1,
+            versionCode      : 3,
     ]
 
     bintrayRepo = 'android-maven'

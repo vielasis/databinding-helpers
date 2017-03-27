@@ -19,7 +19,7 @@ package com.viel.databindinghelpers.recyclerview;
 import android.support.annotation.AnyRes;
 import android.support.annotation.LayoutRes;
 
-public class SimpleItemView implements ItemView {
+public class SimpleItemView extends AbsSimpleItemView {
 
     private int layoutId, bindingVarId;
 

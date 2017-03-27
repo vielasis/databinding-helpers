@@ -16,12 +16,12 @@
 
 package com.viel.databindinghelpers.recyclerview;
 
-public interface IBindingAdapter {
+public abstract class AbsSimpleItemView implements ItemView {
 
-    void onBindViewBinding(BindingViewHolder holder, int position);
+    public abstract int getBindingVarId(int position);
 
-    ItemView getItemView();
-
-    void setItemView(ItemView itemView);
-
+    @Override
+    public final int[] getBindingVarIds(int position) {
+        return new int[]{getBindingVarId(position)};
+    }
 }

@@ -42,15 +42,19 @@ public class SimpleBindingAdapter<T> {
         this(layoutId, bindingVarId, items, null);
     }
 
+    public SimpleBindingAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId, ItemClickListener<T> itemClickListener) {
+        this(layoutId, bindingVarId, null, itemClickListener);
+    }
+
     public SimpleBindingAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId, List<T> items, final ItemClickListener<T> itemClickListener) {
-        adapter = new BindingRecyclerViewAdapter<T>(new SimpleItemView(layoutId, bindingVarId)) {
+        adapter = new BindingRecyclerViewAdapter<T>(layoutId, bindingVarId) {
             @Override
-            public void onBindViewBinding(BindingViewHolder holder, final int position) {
+            public void onBindViewBinding(final BindingViewHolder holder, final int position) {
                 if (itemClickListener != null) {
                     holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            itemClickListener.onItemClick(getItem(position), position);
+                            itemClickListener.onItemClick(getItem(holder.getAdapterPosition()), holder.getAdapterPosition());
                         }
                     });
                 } else {
@@ -58,9 +62,7 @@ public class SimpleBindingAdapter<T> {
                 }
             }
         };
-        if (items != null) {
-            adapter.setItems(items);
-        }
+        adapter.setItems(items);
     }
 
     public interface ItemClickListener<T> {

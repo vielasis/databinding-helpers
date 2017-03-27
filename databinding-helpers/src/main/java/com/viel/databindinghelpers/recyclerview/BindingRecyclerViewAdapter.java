@@ -16,21 +16,39 @@
 
 package com.viel.databindinghelpers.recyclerview;
 
+import android.support.annotation.AnyRes;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingViewHolder> implements IBindingAdapter {
 
     protected List<T> items;
-    protected List<T> filteredItems;
     private ItemView itemView;
+
+    public BindingRecyclerViewAdapter() {
+
+    }
 
     public BindingRecyclerViewAdapter(ItemView itemView) {
         this.itemView = itemView;
+    }
+
+    public BindingRecyclerViewAdapter(@LayoutRes int layoutId, @AnyRes int bindingVarId) {
+        this.itemView = new SimpleItemView(layoutId, bindingVarId);
+    }
+
+    @Override
+    public void setItemView(ItemView itemView) {
+        this.itemView = itemView;
+    }
+
+    @Override
+    public ItemView getItemView() {
+        return itemView;
     }
 
     public void setItems(List<T> items) {
@@ -38,8 +56,6 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             return;
         }
         this.items = items;
-        filteredItems = new LinkedList<>();
-        filteredItems.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -47,28 +63,32 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         return items.get(position);
     }
 
-    protected T getFilteredItem(int position) {
-        return filteredItems.get(position);
-    }
-
     @Override
-    public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new BindingViewHolder(LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(BindingViewHolder holder, int position) {
-        holder.bind(itemView.getBindingVarId(position), filteredItems.get(position));
+    public final void onBindViewHolder(BindingViewHolder holder, int position) {
+        if (itemView instanceof AbsSimpleItemView) {
+            holder.bind(((AbsSimpleItemView) itemView).getBindingVarId(holder.getAdapterPosition()), items.get(holder.getAdapterPosition()));
+        } else {
+            int[] varIds = itemView.getBindingVarIds(position);
+            List args = ((List) items.get(holder.getAdapterPosition()));
+            for (int i = 0; i < varIds.length; i++) {
+                holder.bind(varIds[i], i > args.size() ? null : args.get(i));
+            }
+        }
         onBindViewBinding(holder, position);
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         return itemView.getLayoutId(position);
     }
 
     @Override
-    public int getItemCount() {
-        return filteredItems == null ? 0 : filteredItems.size();
+    public final int getItemCount() {
+        return items == null ? 0 : items.size();
     }
 }

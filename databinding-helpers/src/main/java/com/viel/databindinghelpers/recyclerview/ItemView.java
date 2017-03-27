@@ -20,5 +20,5 @@ public interface ItemView {
 
     int getLayoutId(int position);
 
-    int getBindingVarId(int position);
+    int[] getBindingVarIds(int position);
 }
