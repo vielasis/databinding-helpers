@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingViewHolder> implements IBindingAdapter {
@@ -55,7 +56,10 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         if (items == null || this.items == items) {
             return;
         }
-        this.items = items;
+        if (this.items == null) {
+            this.items = new LinkedList<>();
+        }
+        this.items.addAll(items);
         notifyDataSetChanged();
     }
 
