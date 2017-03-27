@@ -19,11 +19,10 @@ package com.viel.databindinghelpers.recyclerview;
 import android.support.annotation.AnyRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingViewHolder> implements IBindingAdapter {
@@ -57,9 +56,7 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         if (items == null || this.items == items) {
             return;
         }
-        if (this.items == null) {
-            this.items = new LinkedList<>();
-        }
+        this.items = new ArrayList<>(items.size());
         this.items.addAll(items);
         notifyDataSetChanged();
     }
@@ -79,13 +76,14 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             holder.bind(((AbsSimpleItemView) itemView).getBindingVarId(holder.getAdapterPosition()), items.get(holder.getAdapterPosition()));
         } else {
             int[] varIds = itemView.getBindingVarIds(position);
-            try {
-                List args = ((List) items.get(holder.getAdapterPosition()));
+            Object arg = items.get(holder.getAdapterPosition());
+            if (varIds.length == 1) {
+                holder.bind(varIds[0], arg);
+            } else {
+                List args = ((List) arg);
                 for (int i = 0; i < varIds.length; i++) {
-                    holder.bind(varIds[i], args == null || i > args.size() ? null : args.get(i));
+                    holder.bind(varIds[i], args == null || i >= args.size() ? null : args.get(i));
                 }
-            } catch (Exception e) {
-                Log.e("BindingRVAdapter", e.getMessage());
             }
         }
         onBindViewBinding(holder, position);
