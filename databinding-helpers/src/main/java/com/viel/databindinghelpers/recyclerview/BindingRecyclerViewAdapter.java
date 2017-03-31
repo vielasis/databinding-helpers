@@ -23,11 +23,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingViewHolder> implements IBindingAdapter {
 
-    protected List<T> items;
+    protected List<T> items = Collections.emptyList();
     private ItemView itemView;
 
     public BindingRecyclerViewAdapter() {
